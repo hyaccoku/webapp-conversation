@@ -32,7 +32,7 @@ export const sendChatMessage = async (
     onWorkflowFinished: IOnWorkflowFinished
   },
 ) => {
-  return ssePost('chat-messages', {
+  return ssePost('/api/chat', {
     body: {
       ...body,
       response_mode: 'streaming',

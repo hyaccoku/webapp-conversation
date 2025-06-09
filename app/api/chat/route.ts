@@ -1,21 +1,10 @@
 // app/api/chat/route.ts
-import { NextRequest } from 'next/server';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server'
 
-export const runtime = 'edge';
+export const runtime = 'edge'  // Edge Functionで高速化（必須）
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
-
-  const {
-    query = '',
-    inputs = {},
-    user = 'anonymous-user',
-    conversation_id = '',
-    response_mode = 'blocking', // 明示的に
-    files = [],
-    auto_generate_name = true
-  } = body;
+  const body = await req.json()
 
   const apiRes = await fetch('https://api.dify.ai/v1/chat-messages', {
     method: 'POST',
@@ -25,15 +14,17 @@ export async function POST(req: NextRequest) {
     },
     body: JSON.stringify({
       app_id: process.env.NEXT_PUBLIC_APP_ID,
-      query,
-      inputs,
-      user,
-      conversation_id,
-      response_mode,
-      files,
-      auto_generate_name
+      query: body.query || '',
+      inputs: body.inputs || {},
+      user: body.user || 'anonymous-user',
+      response_mode: body.response_mode || 'blocking',
+      conversation_id: body.conversation_id || undefined,
+      files: body.files || undefined,
+      auto_generate_name: body.auto_generate_name ?? true
     })
-  });
+  })
 
-  return new NextResponse(apiRes.body, { status: apiRes.status });
+  return new NextResponse(apiRes.body, {
+    status: apiRes.status
+  })
 }

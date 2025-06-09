@@ -15,6 +15,7 @@ export async function POST(req: NextRequest) {
     },
     body: JSON.stringify({
       app_id: process.env.NEXT_PUBLIC_APP_ID,   // ここは公開しても問題ない ID
+      user: body.user || 'anonymous-user',
       ...body
     })
   });

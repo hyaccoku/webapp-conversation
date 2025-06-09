@@ -37,7 +37,9 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify(payload)
     })
 
-    return new NextResponse(apiRes.body, { status: apiRes.status })
+    // 🔧 streamを直接返すのではなく、.json()で変換
+    const result = await apiRes.json()
+    return NextResponse.json(result, { status: apiRes.status })
 
   } catch (error) {
     console.error('API Route Error:', error)

@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
+
 export const runtime = 'edge'
 
 export async function POST(req: NextRequest) {
   const body = await req.json()
+  const { query, inputs = {}, user, response_mode = 'blocking' } = body
 
-  const queryText = body.query
-  const userId = body.user || 'anonymous-user'
-
-  if (!queryText || typeof queryText !== 'string') {
-    return NextResponse.json({ error: 'Missing query' }, { status: 400 })
+  if (!query || typeof query !== 'string') {
+    return NextResponse.json({ error: 'Query is required' }, { status: 400 })
   }
 
   const apiRes = await fetch('https://api.dify.ai/v1/chat-messages', {
@@ -19,11 +18,10 @@ export async function POST(req: NextRequest) {
     },
     body: JSON.stringify({
       app_id: process.env.NEXT_PUBLIC_APP_ID,
-      inputs: {
-        'sys.query': queryText   // 🔴 ここが重要！
-      },
-      user: userId,
-      response_mode: 'blocking'
+      query,               // ✅ ここに直接 query を渡す
+      inputs,
+      user: user || 'anonymous-user',
+      response_mode
     })
   })
 

@@ -50,6 +50,8 @@ const Main: FC<IMainProps> = () => {
   })
 
   useEffect(() => {
+    console.log('✅ APP_ID from config/index.ts:', APP_ID) // debug: 
+
     if (APP_INFO?.title)
       document.title = `${APP_INFO.title} - Powered by Dify`
   }, [APP_INFO?.title])

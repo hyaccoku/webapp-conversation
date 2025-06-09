@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 // export const runtime = 'edge'
+console.log('✅ ENV CHECK:', process.env.DIFY_APP_SECRET_KEY)
 
 export async function POST(req: NextRequest) {
   try {
